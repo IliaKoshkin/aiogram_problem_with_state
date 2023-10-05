@@ -26,7 +26,6 @@ async def start(message: Message):
 
 @router.callback_query(F.data == "command_01")
 async def cmd_01(callback_query: types.CallbackQuery, state: FSMContext):
-    global bot # экземпляр бота, импортирован из файла main.py
     await state.set_state(Commands.command_02)
     chat_id = callback_query.message.chat.id
     user_id = callback_query.from_user.id
@@ -40,9 +39,8 @@ async def cmd_01(callback_query: types.CallbackQuery, state: FSMContext):
     await bot.send_message(user_id, f"Выберите команду:",
                            reply_markup=keyboard)
 
-@router.callback_query(Commands.command_02, F.data.starttswith('command_02'))
+@router.callback_query(Commands.command_02, F.data.startswith('command_02'))
 async def cmd_02(callback_query: types.CallbackQuery, state: FSMContext):
-    global bot
     #chat_id в который бот должен написать сообщение когда пользователь в личке нажмет command_02
     chat_id = callback_query.data.removeprefix('command_02')
     await bot.send_message(chat_id=chat_id, text=f"Пользователь {callback_query.from_user.id} выполнил команду command_02!")
